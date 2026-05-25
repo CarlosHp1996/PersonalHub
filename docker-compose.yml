@@ -1,0 +1,138 @@
+# ==============================================================================
+# PERSONAL HUB - DOCKER COMPOSE ORCHESTRATION
+# ==============================================================================
+# Core infrastructure setup for local development.
+# Microservices (api, bot) and Nginx are commented out until their respective code bases are created.
+
+services:
+  # ----------------------------------------------------------------------------
+  # 1. PostgreSQL 16 Database Service
+  # ----------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: assistant-postgres
+    restart: always
+    ports:
+      - "5432:5432" # Exposed locally for DBeaver/TablePlus connections
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      - assistant-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  # ----------------------------------------------------------------------------
+  # 2. Redis 7 Caching Service
+  # ----------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: assistant-redis
+    restart: always
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379" # Exposed locally for redis-cli connections
+    volumes:
+      - redis_data:/data
+    networks:
+      - assistant-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 3s
+
+  # ----------------------------------------------------------------------------
+  # 3. RabbitMQ 3 Message Broker Service (with Management Dashboard)
+  # ----------------------------------------------------------------------------
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: assistant-rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"   # AMQP protocol port for C#/.NET and Python queues
+      - "15672:15672" # Management UI dashboard console
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    networks:
+      - assistant-net
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+
+# ------------------------------------------------------------------------------
+# Future Microservices & Reverse Proxy Setup (To be uncommented in later phases)
+# ------------------------------------------------------------------------------
+#  api:
+#    build: ./src/AssistantAPI
+#    container_name: assistant-api
+#    ports:
+#      - "5000:5000"
+#    environment:
+#      - ASPNETCORE_ENVIRONMENT=Production
+#      - ConnectionStrings__Postgres=${POSTGRES_CONNECTION}
+#      - ConnectionStrings__Redis=${REDIS_CONNECTION}
+#      - RabbitMQ__Host=rabbitmq
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
+#      redis:
+#        condition: service_healthy
+#      rabbitmq:
+#        condition: service_healthy
+#    networks:
+#      - assistant-net
+#
+#  bot:
+#    build: ./src/TelegramBot
+#    container_name: telegram-bot
+#    environment:
+#      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+#      - API_BASE_URL=http://api:5000
+#      - RABBITMQ_HOST=rabbitmq
+#    depends_on:
+#      api:
+#        condition: service_started
+#      rabbitmq:
+#        condition: service_healthy
+#    networks:
+#      - assistant-net
+#
+#  nginx:
+#    image: nginx:alpine
+#    container_name: assistant-nginx
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    volumes:
+#      - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf
+#    depends_on:
+#      - api
+#    networks:
+#      - assistant-net
+
+# ------------------------------------------------------------------------------
+# Network and Volumes Specifications
+# ------------------------------------------------------------------------------
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
+
+networks:
+  assistant-net:
+    driver: bridge

@@ -194,15 +194,16 @@ To keep the repository history pristine and ensure high code quality, we strictl
 
 ```
 main (Production, Protected)
- └── feat/dotnet-foundation      (Phase 2)
- └── feat/python-bot-foundation  (Phase 3)
- └── feat/market-weather         (Phase 4)
- └── feat/morning-report         (Phase 5)
- └── feat/alerts-messaging       (Phase 6)
- └── feat/polymarket-tracker     (Phase 7)
- └── chore/testing-quality       (Phase 8)
- └── chore/deploy                (Phase 9)
- └── chore/polish                (Phase 10)
+ └── phase1                      (Phase 1 - Repository & Infrastructure Base)
+ └── phase2                      (Phase 2 - .NET Foundation: Bills CRUD)
+ └── phase3                      (Phase 3 - Python Bot Foundation)
+ └── phase4                      (Phase 4 - Market & Weather Aggregation)
+ └── phase5                      (Phase 5 - Morning Report)
+ └── phase6                      (Phase 6 - Alerts & RabbitMQ Messaging)
+ └── phase7                      (Phase 7 - Polymarket Tracker)
+ └── phase8                      (Phase 8 - Testing & Quality)
+ └── phase9                      (Phase 9 - VPS Deploy & CI/CD)
+ └── phase10                     (Phase 10 - Final Polish & GitHub Portfolio)
 ```
 
 ### Git Action Plan for Each Phase
@@ -210,7 +211,7 @@ main (Production, Protected)
    ```bash
    git checkout main
    git pull origin main
-   git checkout -b feat/your-feature-name
+   git checkout -b phase<number>
    ```
 2. **Commit often, commit small**: Commit after every atomic unit of work (e.g. creating an entity, implementing a service method, writing corresponding tests).
 3. **Commit Message Standard (Conventional Commits)**:
@@ -222,19 +223,14 @@ main (Production, Protected)
    - `docs(...)` - documentation only (e.g., updates to README or ARCHITECTURE.md)
 
 4. **Pull Requests & Code Merging**:
-   - Push your branch to GitHub: `git push origin feat/your-feature-name`
+   - Push your branch to GitHub: `git push origin phase<number>`
    - Open a PR targeting `main`.
    - CI pipeline **must be green** (tests passed, formatting checked, types verified) before merge.
    - Use **Squash and Merge** on GitHub to keep a clean, single-commit history on `main` for each feature phase.
 
-5. **Post-Merge Cleanup (MANDATORY)**:
-   - Once a branch has been reviewed, approved, and merged, it MUST be deleted immediately to prevent branch clutter in the repository.
-   - Switch back to `main`, pull the latest remote changes, and delete the local feature branch:
-     ```bash
-     git checkout main
-     git pull origin main
-     git branch -d feat/your-feature-name
-     ```
+5. **Branch Retention & Lifecycle (MANDATORY)**:
+   - To preserve the development history and evolution of each phase in the monorepo, **phase branches must NEVER be deleted** from either the local workspace or the remote GitHub repository.
+   - All sub-tasks and increments of a specific phase must be developed sequentially on the corresponding branch (`phase<number>`).
 
 ---
 

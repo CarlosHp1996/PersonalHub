@@ -227,6 +227,15 @@ main (Production, Protected)
    - CI pipeline **must be green** (tests passed, formatting checked, types verified) before merge.
    - Use **Squash and Merge** on GitHub to keep a clean, single-commit history on `main` for each feature phase.
 
+5. **Post-Merge Cleanup (MANDATORY)**:
+   - Once a branch has been reviewed, approved, and merged, it MUST be deleted immediately to prevent branch clutter in the repository.
+   - Switch back to `main`, pull the latest remote changes, and delete the local feature branch:
+     ```bash
+     git checkout main
+     git pull origin main
+     git branch -d feat/your-feature-name
+     ```
+
 ---
 
 ## 📝 Code Quality & Standards

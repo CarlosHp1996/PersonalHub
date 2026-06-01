@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssistantAPI", "AssistantAPI\AssistantAPI.csproj", "{6666940A-C49C-4158-B88D-44A1E31DB161}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssistantAPI.Tests", "AssistantAPI.Tests\AssistantAPI.Tests.csproj", "{BEBD21FC-BAD0-488D-98C5-F6B68D36F8F2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6666940A-C49C-4158-B88D-44A1E31DB161}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6666940A-C49C-4158-B88D-44A1E31DB161}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6666940A-C49C-4158-B88D-44A1E31DB161}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6666940A-C49C-4158-B88D-44A1E31DB161}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEBD21FC-BAD0-488D-98C5-F6B68D36F8F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEBD21FC-BAD0-488D-98C5-F6B68D36F8F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEBD21FC-BAD0-488D-98C5-F6B68D36F8F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEBD21FC-BAD0-488D-98C5-F6B68D36F8F2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

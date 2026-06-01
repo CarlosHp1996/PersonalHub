@@ -19,7 +19,7 @@ x86/
 [Aa]rm64/
 bld/
 [Bb]in/
-[Ob]j/
+[Oo]bj/
 [Ll]og/
 [Ll]ogs/
 *.user

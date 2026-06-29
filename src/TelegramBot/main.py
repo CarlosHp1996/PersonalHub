@@ -1,5 +1,4 @@
 # main.py
-import asyncio
 import logging
 import sys
 from telegram.ext import ApplicationBuilder, CommandHandler
@@ -15,7 +14,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-async def main():
+def main():
     logger.info("Initializing Telegram Bot...")
     
     app = ApplicationBuilder().token(settings.TELEGRAM_BOT_TOKEN).build()
@@ -27,11 +26,11 @@ async def main():
     app.add_handler(CommandHandler("addbill", bill_handler.add_bill))
 
     logger.info("Telegram Bot started. Polling...")
-    # Using run_polling is blocking, it's fine for development.
-    await app.run_polling()
+    # run_polling() is a synchronous blocking method that manages the asyncio loop internally
+    app.run_polling()
 
 if __name__ == "__main__":
     try:
-        asyncio.run(main())
+        main()
     except (KeyboardInterrupt, SystemExit):
         logger.info("Bot stopped.")

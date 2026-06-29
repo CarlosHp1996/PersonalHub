@@ -11,10 +11,11 @@ async def list_bills(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         data = await api_client.get("/api/bills", params={"status": "pending"})
         message = format_bills(data)
+        await update.message.reply_text(message, parse_mode="MarkdownV2")
     except Exception as e:
         logger.exception("Failed to list bills")
         message = f"❌ Não foi possível buscar as contas: {str(e)}"
-    await update.message.reply_text(message, parse_mode="MarkdownV2")
+        await update.message.reply_text(message)
 
 async def add_bill(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Parse: /addbill <name> <amount> <due_date (YYYY-MM-DD)> [notes]

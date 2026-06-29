@@ -3,7 +3,7 @@ import logging
 from telegram import Update
 from telegram.ext import ContextTypes
 from services.api_client import api_client
-from bot.formatters.bill_formatter import format_bills
+from bot.formatters.bill_formatter import format_bills, escape_markdown
 
 logger = logging.getLogger(__name__)
 
@@ -36,8 +36,11 @@ async def add_bill(update: Update, context: ContextTypes.DEFAULT_TYPE):
         payload = {"name": name, "amount": amount, "dueDate": due_date, "notes": notes}
         result = await api_client.post("/api/bills", payload)
         
+        escaped_name = escape_markdown(result.get('name', ''))
+        escaped_amount = escape_markdown(f"{result.get('amount', 0.0):.2f}")
+        
         await update.message.reply_text(
-            f"✅ Conta *{result.get('name')}* de R$ {result.get('amount'):.2f} cadastrada com sucesso\\!",
+            f"✅ Conta *{escaped_name}* de R$ {escaped_amount} cadastrada com sucesso\\!",
             parse_mode="MarkdownV2"
         )
     except ValueError:

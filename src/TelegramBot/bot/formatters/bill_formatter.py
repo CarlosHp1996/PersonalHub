@@ -49,7 +49,7 @@ def format_bills(data: dict) -> str:
             emoji = "📅"
             status_text = "Pendente"
 
-        line = f"{emoji} *{name}*: R$ {amount} \\(Venc: {due_formatted} \\- {status_text}\\)"
+        line = f"{emoji} *{name}*: R$ {escape_markdown(amount)} \\(Venc: {due_formatted} \\- {status_text}\\)"
         if notes:
             line += f"\n   _Obs: {escape_markdown(notes)}_"
         lines.append(line)
@@ -62,7 +62,7 @@ def format_bills(data: dict) -> str:
     lines.append("\n📊 *Resumo:*")
     lines.append(f"• Pendentes: {total_pending}")
     lines.append(f"• Atrasadas: {total_overdue}")
-    lines.append(f"• Total a Pagar: *R$ {total_amount}*")
+    lines.append(f"• Total a Pagar: *R$ {escape_markdown(total_amount)}*")
 
     return "\n".join(lines)
 

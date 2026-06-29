@@ -77,40 +77,40 @@ services:
 # ------------------------------------------------------------------------------
 # Future Microservices & Reverse Proxy Setup (To be uncommented in later phases)
 # ------------------------------------------------------------------------------
-#  api:
-#    build: ./src/AssistantAPI
-#    container_name: assistant-api
-#    ports:
-#      - "5000:5000"
-#    environment:
-#      - ASPNETCORE_ENVIRONMENT=Production
-#      - ConnectionStrings__Postgres=${POSTGRES_CONNECTION}
-#      - ConnectionStrings__Redis=${REDIS_CONNECTION}
-#      - RabbitMQ__Host=rabbitmq
-#    depends_on:
-#      postgres:
-#        condition: service_healthy
-#      redis:
-#        condition: service_healthy
-#      rabbitmq:
-#        condition: service_healthy
-#    networks:
-#      - assistant-net
-#
-#  bot:
-#    build: ./src/TelegramBot
-#    container_name: telegram-bot
-#    environment:
-#      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
-#      - API_BASE_URL=http://api:5000
-#      - RABBITMQ_HOST=rabbitmq
-#    depends_on:
-#      api:
-#        condition: service_started
-#      rabbitmq:
-#        condition: service_healthy
-#    networks:
-#      - assistant-net
+  api:
+    build: ./src/AssistantAPI
+    container_name: assistant-api
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__Postgres=${POSTGRES_CONNECTION}
+      - ConnectionStrings__Redis=${REDIS_CONNECTION}
+      - RabbitMQ__Host=rabbitmq
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - assistant-net
+
+  bot:
+    build: ./src/TelegramBot
+    container_name: telegram-bot
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - API_BASE_URL=http://api:5000
+      - RABBITMQ_HOST=rabbitmq
+    depends_on:
+      api:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - assistant-net
 #
 #  nginx:
 #    image: nginx:alpine
